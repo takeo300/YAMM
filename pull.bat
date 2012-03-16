@@ -1,2 +1,2 @@
-git pull -v --progress      "origin" master
+git pull "origin" master
 pause
