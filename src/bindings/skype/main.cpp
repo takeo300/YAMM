@@ -1,3 +1,6 @@
 #include "main.h"
 
-// DLL-Code here
+int main(void)
+{
+
+}
