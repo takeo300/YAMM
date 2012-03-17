@@ -10,12 +10,13 @@ LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 
 // Das Fensterhandle
 HWND hWnd = 0;
-HWND hWnd2 = 0;
+HWND hWndskype = 0;
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     // Fenster erzeugen und Handle speichern
     hWnd = CreateMainWindow(hInstance);
-    hWnd2=hWnd;
+    hWndskype = FindWindow("WindowClass",NULL);
     // Wenn der Rueckgabewert 0 ist, ist ein Fehler aufgetreten
     if(0 == hWnd)
     {
@@ -47,7 +48,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         std::cout<<"out";
         break;
         case WM_LBUTTONDOWN:
-        PostMessage(hWnd2,WM_DESTROY,wParam,lParam);
+        PostMessage(hWndskype,WM_DESTROY,wParam,lParam);
         std::cout<<"click";
         break;
         case WM_DESTROY:
