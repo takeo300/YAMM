@@ -16,19 +16,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
     // Fenster erzeugen und Handle speichern
     hWnd = CreateMainWindow(hInstance);
-    hWndskype = FindWindow("WindowClass",NULL);
+    hWndskype = FindWindow("tSkMainForm",NULL);
     // Wenn der Rueckgabewert 0 ist, ist ein Fehler aufgetreten
     if(0 == hWnd)
     {
         MessageBox(0, "Fenster konnte nicht erzeugt werden", "Fehler", MB_OK);
         return 0;
     }
+    if(0 == hWndskype)
+    {
+        MessageBox(0, "Skype Handle nicht gefunden", "Fehler", MB_OK);
+        return 0;
+    }
 
 	// Struktur, in der Informationen zur Nachricht gespeichert werden
     MSG msg;
 
-    RegisterWindowMessage("SkypeControlAPIDiscover");
-    // Diese Schleife laeuft bis die Nachricht WM_QUIT empfangen wird
+    // idea: we retrieve the "ports" that skype is listening at. The first call to RegisterWindowMessage assigns the message's name to an unique integer, the subsequent ones don't actually register them but retrieve the values.
+    int WM_SkypeControlAPIDiscover =  RegisterWindowMessage("SkypeControlAPIDiscover");
+    int WM_SkypeControlAPIAttach = RegisterWindowMessage("SkypeControlAPIAttach");
+
+    // Welcoming message to skype
+    PostMessage(hWndskype, WM_SkypeControlAPIDiscover);
+
+    // Diese Schleife läuft bis die Nachricht WM_QUIT empfangen wird
     while(GetMessage(&msg, NULL, 0, 0))
 	{
         // Nachricht an die Callbackfunktion senden
@@ -49,7 +60,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         std::cout<<"out";
         break;
         case WM_LBUTTONDOWN:
-        PostMessage(hWndskype,WM_DESTROY,wParam,lParam);
+        PostMessage(hWndskype,(UINT) "SkypeControlAPIDiscover",hWnd,lParam);
         std::cout<<"click";
         break;
         case WM_DESTROY:
