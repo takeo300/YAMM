@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <iostream>
-
+#include <string.h>
+#include <stdio.h>
 // Anwendungsfenster erzeugen
 HWND CreateMainWindow(HINSTANCE hInstance);
 
@@ -33,8 +34,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MSG msg;
 
     // idea: we retrieve the "ports" that skype is listening at. The first call to RegisterWindowMessage assigns the message's name to an unique integer, the subsequent ones don't actually register them but retrieve the values.
-    WM_SkypeControlAPIDiscover =  RegisterWindowMessage("SkypeControlAPIDiscover");
-    WM_SkypeControlAPIAttach = RegisterWindowMessage("SkypeControlAPIAttach");
+    WM_SkypeControlAPIDiscover  =  RegisterWindowMessage("SkypeControlAPIDiscover");
+    WM_SkypeControlAPIAttach    = RegisterWindowMessage("SkypeControlAPIAttach");
 
     {
 
@@ -43,20 +44,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         MessageBox(0, "Window Message \"SkypeControlAPIDiscover\" konnte nicht registriert werden  ", "Fehler", MB_OK | MB_ICONSTOP );
     }
-    else
-    {
-        MessageBox(0, "\"SkypeControlAPIDiscover\" Erfolgreich registriert" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
-    }
+
     if (WM_SkypeControlAPIAttach == 0)
     {
         MessageBox(0, "Window Message \"SkypeControlAPIAttach\" konnte nicht registriert werden  ", "Fehler", MB_OK | MB_ICONSTOP);
-    } else
-    {
-        MessageBox(0, "\"SkypeControlAPIAttach\" Erfolgreich registriert" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
     }
 }
-    // Welcoming message to skype
-    //PostMessage(HWND_BROADCAST, WM_SkypeControlAPIDiscover);
+
 
     // Diese Schleife läuft bis die Nachricht WM_QUIT empfangen wird
     while(GetMessage(&msg, NULL, 0, 0))
@@ -77,6 +71,10 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     {
         case WM_COPYDATA:
             MessageBox(0, "WM_COPYDATA empfangen!" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+            char s[512];
+
+            sprintf(s, "msg = %i, wParam = %i, lParam = %i", msg, wParam, lParam);
+            return MessageBox(hWnd, s, "ShowMessageParameters", MB_OK);
         break;
         case WM_LBUTTONDOWN:
             PostMessage(HWND_BROADCAST, WM_SkypeControlAPIDiscover ,(WPARAM) hWnd,NULL);
@@ -92,14 +90,14 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     }
     if (msg== WM_SkypeControlAPIAttach)
     {
-        MessageBox(0, "Skype hat geantwortet" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
-        if(lParam == 0)
+
+        /*if(lParam == 0)
         {
             MessageBox(0, "Verbindung hergestellt" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
         }if(lParam == 1)
         {
             MessageBox(0, "Benötige Berechtigung" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
-        }
+        }*/
     }
     else{
     return DefWindowProc(hWnd,msg,wParam,lParam);
