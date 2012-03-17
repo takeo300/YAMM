@@ -27,6 +27,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Struktur, in der Informationen zur Nachricht gespeichert werden
     MSG msg;
 
+    RegisterWindowMessage("SkypeControlAPIDiscover");
     // Diese Schleife laeuft bis die Nachricht WM_QUIT empfangen wird
     while(GetMessage(&msg, NULL, 0, 0))
 	{
