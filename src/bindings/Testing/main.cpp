@@ -1,10 +1,21 @@
 #include <windows.h>
 #include <iostream>
+
+// Anwendungsfenster erzeugen
+HWND CreateMainWindow(HINSTANCE hInstance);
+
+// Callback Funktion zur Nachrichtenbehandlung
+LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
+
+// Das Fensterhandle
+HWND hWnd = 0;
+HWND hWnd2 = 0;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     // Fenster erzeugen und Handle speichern
     hWnd = CreateMainWindow(hInstance);
-
+    hWnd2=hWnd;
     // Wenn der Rueckgabewert 0 ist, ist ein Fehler aufgetreten
     if(0 == hWnd)
     {
@@ -33,10 +44,11 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     switch(msg)
     {
         case WM_COPYDATA:
-        return 0;
-        break;
-        case WM_LBUTTONDBLCLK:
         std::cout<<"out";
+        break;
+        case WM_LBUTTONDOWN:
+        PostMessage(hWnd2,WM_DESTROY,wParam,lParam);
+        std::cout<<"click";
         break;
         case WM_DESTROY:
                     PostQuitMessage(0);
