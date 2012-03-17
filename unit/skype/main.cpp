@@ -76,22 +76,34 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     switch(msg)
     {
         case WM_COPYDATA:
-            std::cout<<"out";
+            MessageBox(0, "WM_COPYDATA empfangen!" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
         break;
         case WM_LBUTTONDOWN:
-            std::cout<<"click";
             PostMessage(HWND_BROADCAST, WM_SkypeControlAPIDiscover ,(WPARAM) hWnd,NULL);
         break;
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
         break;
-        //case WM_SkypeControlAPIAttach:
-        //MessageBox(0, "Skype hat geantwortet" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+        //case 0xC218:
+
         //break;
 
     }
+    if (msg== WM_SkypeControlAPIAttach)
+    {
+        MessageBox(0, "Skype hat geantwortet" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+        if(lParam == 0)
+        {
+            MessageBox(0, "Verbindung hergestellt" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+        }if(lParam == 1)
+        {
+            MessageBox(0, "Benötige Berechtigung" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+        }
+    }
+    else{
     return DefWindowProc(hWnd,msg,wParam,lParam);
+    }
 }
 
 HWND CreateMainWindow(HINSTANCE hInstance)
