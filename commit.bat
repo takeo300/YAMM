@@ -1,3 +1,3 @@
 git commit
-git push
+git push "origin" master
 pause
