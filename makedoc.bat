@@ -1,0 +1,6 @@
+echo off
+echo Clean up...
+rmdir /S /Q doc
+echo Making documentation...
+mkdir doc
+doxygen Doxyfile
