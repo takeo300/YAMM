@@ -12,32 +12,51 @@ LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 HWND hWnd = 0;
 HWND hWndskype = 0;
 
+UINT WM_SkypeControlAPIDiscover   =  0 ;
+UINT WM_SkypeControlAPIAttach     =  0 ;
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     // Fenster erzeugen und Handle speichern
     hWnd = CreateMainWindow(hInstance);
-    hWndskype = FindWindow("tSkMainForm",NULL);
+
     // Wenn der Rueckgabewert 0 ist, ist ein Fehler aufgetreten
     if(0 == hWnd)
     {
         MessageBox(0, "Fenster konnte nicht erzeugt werden", "Fehler", MB_OK);
         return 0;
     }
-    if(0 == hWndskype)
-    {
-        MessageBox(0, "Skype Handle nicht gefunden", "Fehler", MB_OK);
-        return 0;
-    }
+
+
 
 	// Struktur, in der Informationen zur Nachricht gespeichert werden
     MSG msg;
 
     // idea: we retrieve the "ports" that skype is listening at. The first call to RegisterWindowMessage assigns the message's name to an unique integer, the subsequent ones don't actually register them but retrieve the values.
-    int WM_SkypeControlAPIDiscover =  RegisterWindowMessage("SkypeControlAPIDiscover");
-    int WM_SkypeControlAPIAttach = RegisterWindowMessage("SkypeControlAPIAttach");
+    WM_SkypeControlAPIDiscover =  RegisterWindowMessage("SkypeControlAPIDiscover");
+    WM_SkypeControlAPIAttach = RegisterWindowMessage("SkypeControlAPIAttach");
 
+    {
+
+
+    if (WM_SkypeControlAPIDiscover == 0)
+    {
+        MessageBox(0, "Window Message \"SkypeControlAPIDiscover\" konnte nicht registriert werden  ", "Fehler", MB_OK | MB_ICONSTOP );
+    }
+    else
+    {
+        MessageBox(0, "\"SkypeControlAPIDiscover\" Erfolgreich registriert" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+    }
+    if (WM_SkypeControlAPIAttach == 0)
+    {
+        MessageBox(0, "Window Message \"SkypeControlAPIAttach\" konnte nicht registriert werden  ", "Fehler", MB_OK | MB_ICONSTOP);
+    } else
+    {
+        MessageBox(0, "\"SkypeControlAPIAttach\" Erfolgreich registriert" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+    }
+}
     // Welcoming message to skype
-    PostMessage(hWndskype, WM_SkypeControlAPIDiscover);
+    //PostMessage(HWND_BROADCAST, WM_SkypeControlAPIDiscover);
 
     // Diese Schleife läuft bis die Nachricht WM_QUIT empfangen wird
     while(GetMessage(&msg, NULL, 0, 0))
@@ -57,16 +76,20 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     switch(msg)
     {
         case WM_COPYDATA:
-        std::cout<<"out";
+            std::cout<<"out";
         break;
         case WM_LBUTTONDOWN:
-        PostMessage(hWndskype,(UINT) "SkypeControlAPIDiscover",hWnd,lParam);
-        std::cout<<"click";
+            std::cout<<"click";
+            PostMessage(HWND_BROADCAST, WM_SkypeControlAPIDiscover ,(WPARAM) hWnd,NULL);
         break;
         case WM_DESTROY:
-                    PostQuitMessage(0);
-                    return 0;
-                break;
+            PostQuitMessage(0);
+            return 0;
+        break;
+        //case WM_SkypeControlAPIAttach:
+        //MessageBox(0, "Skype hat geantwortet" , "Erfolg!", MB_OK|MB_ICONINFORMATION);
+        //break;
+
     }
     return DefWindowProc(hWnd,msg,wParam,lParam);
 }
