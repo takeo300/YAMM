@@ -32,9 +32,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Struktur, in der Informationen zur Nachricht gespeichert werden
     MSG msg;
 
-    RegisterWindowMessage("SkypeControlAPIDiscover");
-    RegisterWindowMessage("SkypeControlAPIAttach");
-    // Diese Schleife laeuft bis die Nachricht WM_QUIT empfangen wird
+    // idea: we retrieve the "ports" that skype is listening at. The first call to RegisterWindowMessage assigns the message's name to an unique integer, the subsequent ones don't actually register them but retrieve the values.
+    int WM_SkypeControlAPIDiscover =  RegisterWindowMessage("SkypeControlAPIDiscover");
+    int WM_SkypeControlAPIAttach = RegisterWindowMessage("SkypeControlAPIAttach");
+
+    // Welcoming message to skype
+    PostMessage(hWndskype, WM_SkypeControlAPIDiscover);
+
+    // Diese Schleife läuft bis die Nachricht WM_QUIT empfangen wird
     while(GetMessage(&msg, NULL, 0, 0))
 	{
         // Nachricht an die Callbackfunktion senden
