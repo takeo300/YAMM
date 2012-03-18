@@ -1,6 +1,6 @@
 echo off
 echo Clean up...
-rmdir /S /Q doc
+rmdir /S /Q doc\xhtml
 echo Making documentation...
-mkdir doc
 doxygen Doxyfile
+pause
