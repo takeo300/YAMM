@@ -93,7 +93,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_RBUTTONDOWN:
         cout << "rclick";
 
-        static char acInputRow[1024]="CALL echo123";
+        static char acInputRow[1024]="SET USERSTATUS AWAY";
         if( hWndskype!=NULL )
         {
             COPYDATASTRUCT CopyData;
@@ -104,11 +104,9 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
             CopyData.cbData=strlen(acInputRow)+1;
             if( CopyData.cbData!=1 )
             {
-                if( SendMessage( hWndskype, WM_COPYDATA, (WPARAM)hWnd, (LPARAM)&CopyData)!=NULL )
-                {
-                    hWndskype=NULL;
-                    printf("!!! Disconnected\n");
-                }
+                 SendMessage( hWndskype, WM_COPYDATA, (WPARAM)hWnd, (LPARAM)&CopyData);
+                   printf("Gesendet!\n");
+
             }
         }
         break;
