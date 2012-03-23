@@ -40,11 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 0;
     }
 
-
-
-
     MSG msg;
-
 
     WM_SkypeControlAPIDiscover  =  RegisterWindowMessage("SkypeControlAPIDiscover");
     WM_SkypeControlAPIAttach    = RegisterWindowMessage("SkypeControlAPIAttach");
@@ -82,12 +78,14 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     switch(msg)
     {
     case WM_COPYDATA:
+
         if (wParam ==(WPARAM) hWndskype)
         {
-            char s[512];
+            char s[5120]= {};
             PCOPYDATASTRUCT pCopyData=(PCOPYDATASTRUCT)lParam;
             sprintf(s, "Answer: %.*s\n",  pCopyData->cbData, pCopyData->lpData);
             printf(s);
+
             //MessageBox(hWnd, s, "ShowMessageParameters", MB_OK);
         }
 
@@ -95,7 +93,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_RBUTTONDOWN:
         cout << "rclick";
 
-        static char acInputRow[1024]="PING";
+        static char acInputRow[1024]="CALL echo123";
         if( hWndskype!=NULL )
         {
             COPYDATASTRUCT CopyData;
@@ -106,7 +104,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
             CopyData.cbData=strlen(acInputRow)+1;
             if( CopyData.cbData!=1 )
             {
-                if( PostMessage( hWndskype, WM_COPYDATA, (WPARAM)hWnd, (LPARAM)&CopyData)==FALSE )
+                if( SendMessage( hWndskype, WM_COPYDATA, (WPARAM)hWnd, (LPARAM)&CopyData)!=NULL )
                 {
                     hWndskype=NULL;
                     printf("!!! Disconnected\n");
@@ -115,45 +113,40 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         }
         break;
     case WM_LBUTTONDOWN:
-        SendMessageTimeout( HWND_BROADCAST, WM_SkypeControlAPIDiscover, (WPARAM)hWnd, 0, SMTO_ABORTIFHUNG, 1000, NULL);
+        SendMessage( HWND_BROADCAST, WM_SkypeControlAPIDiscover, (WPARAM)hWnd, (LPARAM)hWnd);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
         break;
-
-
-    }
-
-    if (msg== WM_SkypeControlAPIAttach)
-    {
-
-        switch(lParam)
+    default:
+        if( msg==WM_SkypeControlAPIAttach )
         {
-        case SKYPECONTROLAPI_ATTACH_SUCCESS:
-            printf("!!! Connected; to terminate issue #disconnect\n");
-            hWndskype = (HWND)wParam;
-            break;
-        case SKYPECONTROLAPI_ATTACH_PENDING_AUTHORIZATION:
-            printf("!!! Pending authorization\n");
-            break;
-        case SKYPECONTROLAPI_ATTACH_REFUSED:
-            printf("!!! Connection refused\n");
-            break;
-        case SKYPECONTROLAPI_ATTACH_NOT_AVAILABLE:
-            printf("!!! Skype API not available\n");
-            break;
-        case SKYPECONTROLAPI_ATTACH_API_AVAILABLE:
-            printf("!!! Try connect now (API available); connecting\n");
-            PostMessage(HWND_BROADCAST, WM_SkypeControlAPIDiscover ,(WPARAM) hWnd,1);
+            switch(lParam)
+            {
+            case SKYPECONTROLAPI_ATTACH_SUCCESS:
+                printf("!!! Connected\n");
+                hWndskype=(HWND)wParam;
+                break;
+            case SKYPECONTROLAPI_ATTACH_PENDING_AUTHORIZATION:
+                printf("!!! Pending authorization\n");
+                break;
+            case SKYPECONTROLAPI_ATTACH_REFUSED:
+                printf("!!! Connection refused\n");
+                break;
+            case SKYPECONTROLAPI_ATTACH_NOT_AVAILABLE:
+                printf("!!! Skype API not available\n");
+                break;
+            case SKYPECONTROLAPI_ATTACH_API_AVAILABLE:
+                printf("!!! Try connect now (API available); issue #connect\n");
+                break;
+            }
+
             break;
         }
-
-    }
-
-    else
-    {
         return DefWindowProc(hWnd,msg,wParam,lParam);
+        break;
+
     }
 
 }
