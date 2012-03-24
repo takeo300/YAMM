@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string.h>
 #include <stdio.h>
+#include "skype.h"
+
 // Anwendungsfenster erzeugen
 HWND CreateMainWindow(HINSTANCE hInstance);
 
@@ -10,23 +12,12 @@ LRESULT CALLBACK MessageHandler(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 
 using namespace std;
 // Das Fensterhandle
-HWND hWnd = 0;
-HWND hWndskype = 0;
+
 
 UINT WM_SkypeControlAPIDiscover   =  0 ;
 UINT WM_SkypeControlAPIAttach     =  0 ;
 
-enum
-{
-    SKYPECONTROLAPI_ATTACH_SUCCESS=0,								// Client is successfully attached and API window handle can be found in wParam parameter
-    SKYPECONTROLAPI_ATTACH_PENDING_AUTHORIZATION=1,	// Skype has acknowledged connection request and is waiting for confirmation from the user.
-    // The client is not yet attached and should wait for SKYPECONTROLAPI_ATTACH_SUCCESS message
-    SKYPECONTROLAPI_ATTACH_REFUSED=2,								// User has explicitly denied access to client
-    SKYPECONTROLAPI_ATTACH_NOT_AVAILABLE=3,					// API is not available at the moment. For example, this happens when no user is currently logged in.
-    // Client should wait for SKYPECONTROLAPI_ATTACH_API_AVAILABLE broadcast before making any further
-    // connection attempts.
-    SKYPECONTROLAPI_ATTACH_API_AVAILABLE=0x8001
-};
+
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -92,23 +83,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         break;
     case WM_RBUTTONDOWN:
         cout << "rclick";
-
-        static char* InputRow="CALL mitmischer.1703";
-        if( hWndskype!=NULL )
-        {
-            COPYDATASTRUCT CopyData;
-
-
-            CopyData.dwData=0;
-            CopyData.lpData=InputRow;
-            CopyData.cbData=strlen(InputRow)+1;
-            if( CopyData.cbData!=1 )
-            {
-                 SendMessage( hWndskype, WM_COPYDATA, (WPARAM)hWnd, (LPARAM)&CopyData);
-                   printf("Gesendet!\n");
-
-            }
-        }
+        bool SkypesendCommand("PING");
         break;
     case WM_LBUTTONDOWN:
         SendMessage( HWND_BROADCAST, WM_SkypeControlAPIDiscover, (WPARAM)hWnd, (LPARAM)hWnd);

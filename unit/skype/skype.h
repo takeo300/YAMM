@@ -1,6 +1,12 @@
 #ifndef SKYPE_H_INCLUDED
 #define SKYPE_H_INCLUDED
+#include <windows.h>
+#include <iostream>
+#include <string.h>
+#include <stdio.h>
 
+HWND hWndskype = 0;
+HWND hWnd = 0;
 
 
 enum
@@ -15,7 +21,7 @@ enum
     SKYPECONTROLAPI_ATTACH_API_AVAILABLE=0x8001
 };
 
-extern bool Skype_sendCommand(char* InputCommand);
+bool SkypesendCommand(char* InputCommand);
 
 
 
