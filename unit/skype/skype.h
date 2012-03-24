@@ -8,6 +8,10 @@
 extern HWND hWndskype;
 extern HWND hWnd;
 
+using namespace std;
+
+extern UINT WM_SkypeControlAPIDiscover    ;
+extern UINT WM_SkypeControlAPIAttach      ;
 
 enum
 {
@@ -22,9 +26,9 @@ enum
 };
 
 bool SkypesendCommand(char* InputCommand);
-
-
-
-
+bool SkypesendAttach(HWND WindowHandle);
+bool SkypeInit(void);
+int  SkypecheckAPIAttach(HWND WindowHandle, UINT msg, WPARAM wParam, LPARAM lParam);
+int  SkypeCreateCall(string target1,...);
 
 #endif // SKYPE_H_INCLUDED

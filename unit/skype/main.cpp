@@ -86,41 +86,17 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
         break;
     case WM_RBUTTONDOWN:
-        cout << "rclick";
-        SkypesendCommand("PING");
+        SkypeCreateCall("echo123");
         break;
     case WM_LBUTTONDOWN:
-        SendMessage( HWND_BROADCAST, WM_SkypeControlAPIDiscover, (WPARAM)hWnd, (LPARAM)hWnd);
+        SkypesendAttach(hWnd);
         break;
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
         break;
     default:
-        if( msg==WM_SkypeControlAPIAttach )
-        {
-            switch(lParam)
-            {
-            case SKYPECONTROLAPI_ATTACH_SUCCESS:
-                printf("!!! Connected\n");
-                hWndskype=(HWND)wParam;
-                break;
-            case SKYPECONTROLAPI_ATTACH_PENDING_AUTHORIZATION:
-                printf("!!! Pending authorization\n");
-                break;
-            case SKYPECONTROLAPI_ATTACH_REFUSED:
-                printf("!!! Connection refused\n");
-                break;
-            case SKYPECONTROLAPI_ATTACH_NOT_AVAILABLE:
-                printf("!!! Skype API not available\n");
-                break;
-            case SKYPECONTROLAPI_ATTACH_API_AVAILABLE:
-                printf("!!! Try connect now (API available); issue #connect\n");
-                break;
-            }
-
-            break;
-        }
+        SkypecheckAPIAttach(hWnd, msg,  wParam,  lParam);
         return DefWindowProc(hWnd,msg,wParam,lParam);
         break;
 
