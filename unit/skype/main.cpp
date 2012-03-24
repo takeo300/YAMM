@@ -93,15 +93,15 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
     case WM_RBUTTONDOWN:
         cout << "rclick";
 
-        static char acInputRow[1024]="SET USERSTATUS AWAY";
+        static char* InputRow="CALL mitmischer.1703";
         if( hWndskype!=NULL )
         {
             COPYDATASTRUCT CopyData;
 
 
             CopyData.dwData=0;
-            CopyData.lpData=acInputRow;
-            CopyData.cbData=strlen(acInputRow)+1;
+            CopyData.lpData=InputRow;
+            CopyData.cbData=strlen(InputRow)+1;
             if( CopyData.cbData!=1 )
             {
                  SendMessage( hWndskype, WM_COPYDATA, (WPARAM)hWnd, (LPARAM)&CopyData);
