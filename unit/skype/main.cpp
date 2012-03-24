@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include "skype.h"
 
+//define globals
+HWND hWndskype = 0;
+HWND hWnd = 0;
+
 // Anwendungsfenster erzeugen
 HWND CreateMainWindow(HINSTANCE hInstance);
 
@@ -83,7 +87,7 @@ LRESULT CALLBACK MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
         break;
     case WM_RBUTTONDOWN:
         cout << "rclick";
-        bool SkypesendCommand("PING");
+        SkypesendCommand("PING");
         break;
     case WM_LBUTTONDOWN:
         SendMessage( HWND_BROADCAST, WM_SkypeControlAPIDiscover, (WPARAM)hWnd, (LPARAM)hWnd);

@@ -140,4 +140,5 @@ bool terminateCall();
  */
 bool finalize();
 }
+
 #endif // __MAIN_H__

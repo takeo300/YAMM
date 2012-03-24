@@ -5,8 +5,8 @@
 #include <string.h>
 #include <stdio.h>
 
-HWND hWndskype = 0;
-HWND hWnd = 0;
+extern HWND hWndskype;
+extern HWND hWnd;
 
 
 enum

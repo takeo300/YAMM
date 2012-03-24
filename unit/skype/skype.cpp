@@ -2,9 +2,6 @@
 
 bool SkypesendCommand(char* InputCommand)
 {
-
-
-
         if( hWndskype!=NULL )
         {
             COPYDATASTRUCT CopyData;
