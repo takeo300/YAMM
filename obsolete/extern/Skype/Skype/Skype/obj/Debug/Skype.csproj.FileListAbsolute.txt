@@ -1,0 +1,2 @@
+\\WORK\IProgrammer\articles\Published\SKYPE2\Skype\Skype\Skype\obj\Debug\Skype.exe
+\\WORK\IProgrammer\articles\Published\SKYPE2\Skype\Skype\Skype\obj\Debug\Skype.pdb
