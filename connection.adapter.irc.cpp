@@ -1,6 +1,6 @@
-#include "irc.h"
+#include "connection.adapter.irc.h"
 
-IRC::IRC(QString host, int port) {
+Connection_Adapter_IRC::Connection_Adapter_IRC(QString host, int port) {
     QHostAddress *haddr = new QHostAddress();
     haddr->setAddress(host);
     if (haddr->protocol() != QAbstractSocket::IPv4Protocol
@@ -18,15 +18,15 @@ IRC::IRC(QString host, int port) {
     this->socket = new QTcpSocket();
 }
 
-IRC::~IRC() {
+Connection_Adapter_IRC::~Connection_Adapter_IRC() {
     this->disconnect();
 }
 
-bool IRC::isConnected() {
+bool Connection_Adapter_IRC::isConnected() {
     return this->socket->isOpen();
 }
 
-void IRC::connect() {
+void Connection_Adapter_IRC::connect() {
     this->socket->connectToHost(*this->ip, (quint16) this->port);
     if (this->socket->waitForConnected()) {
         qDebug() << "[IRC] connection established" << endl;
@@ -37,13 +37,13 @@ void IRC::connect() {
     }
 }
 
-void IRC::disconnect() {
+void Connection_Adapter_IRC::disconnect() {
     if (this->isConnected()) {
         this->socket->close();
     }
 }
 
-int IRC::writeLine(QString data) {
+int Connection_Adapter_IRC::writeLine(QString data) {
     data.append("\r\n");
 
     if (this->isConnected()) {
@@ -54,7 +54,7 @@ int IRC::writeLine(QString data) {
     }
 }
 
-void IRC::receivedAnswer() {
+void Connection_Adapter_IRC::receivedAnswer() {
     QString *answer = new QString(this->socket->readAll());
     cout << "[IRC - Answer] " << answer->toStdString() << endl;
 }

@@ -1,0 +1,8 @@
+#ifndef CONN_ADAPTER_ABSTRACT_H
+#define CONN_ADAPTER_ABSTRACT_H
+class Conn_Adapter_Abstract {
+public:
+
+};
+
+#endif // CONN_ADAPTER_ABSTRACT_H
