@@ -1,0 +1,10 @@
+#include <Qt/QtGui>
+#include <Qt/QtDBus>
+#include <Qt/QtCore>
+
+int main(int argc,char *argv[])
+{
+	QApplication* app = new QApplication(argc,argv);
+	QDBusInterface *test =new QDBusInterface("org.YAMM.test","/com/Skype/Client");
+	test->call("Notify","bla");
+}

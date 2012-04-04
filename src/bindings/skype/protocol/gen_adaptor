@@ -1,0 +1,4 @@
+#!/bin/bash
+
+qdbuscpp2xml $1".h" -o $1".xml"
+qdbusxml2cpp $1".xml" -a $1"Adaptor" -i $1"Adaptor"
