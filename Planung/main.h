@@ -7,16 +7,16 @@ std::string what;
 
 /// Container für zusammengemergte Chats / Calls
 struct Conversation{
-	Chat[] chats;
-	Call[] calls;
+	vector<Chat> chats;
+	vector<Call> calls;
 };
 
 /// Informationen + Inhalt eines Chats
 struct Chat{
 	/// Nachrichten
-	Message[] messages;
+	vector<Message> messages;
 	/// Mitglieder des Chats
-	User[] members;
+	vector<User> members;
 	/// vielleicht optional, für Skype wichtig: Besitzer des Chats
 	/// @TODO: optional: Wie bekommen wir das in eine Form?
 	/// @TODO: Rollenverteilung innerhalb des Chats? Admin, Creator, Listener etc.?
@@ -26,7 +26,7 @@ struct Chat{
 /// Informationen über einen Anruf
 struct Call{
 	/// Mitglieder des Anrufs
-	User[] members;
+	vector<User> members;
 	/// vergangene Zeit in Millisekunden
 	unsigned long timeElapsed;
 	/// vielleicht optional, für Skype wichtig: Besitzer des Anrufs
@@ -50,7 +50,7 @@ public signals:
 class CallConnection: public Connection{
 /// Führt einen Anruf an die übergebenen Benutzer aus.
 /// @return Anruf als @see Call.
-	Call doCall(User[] users) = 0;
+	Call doCall(vector<User> users) = 0;
 /// Beantwortet den übergebenen Anruf bzw. entfernt das Halten.
 /// @todo Differenzierung zwischen Anruf beantwortet / halten?
 	Call doCall(Call call) = 0;
@@ -63,7 +63,7 @@ signals:
 class IMCallConnection : public IMConnection, CallConnection
 {
 /// Wenn sowohl IMs als auch Calls gehalten werden können, können aus beiden Typen bestehende Conversations verwandt werden.
-Conversation[] conversations;
+Conversation conversations[];
 }
 /// @todo Können wir davon ausgehen, dass ein VideoCall ein Call ist?
 class VideoCallConnection: public CallConnection
@@ -74,7 +74,7 @@ class VideoCallConnection: public CallConnection
 	void setVideoEnabled(bool enabled = true);
 /// Führt einen Videoanruf an die übergebenen Benutzer aus.
 /// @return Anruf als @see Call.
-	Call doVCall(User[] users) = 0;
+	Call doVCall(vector<User> users) = 0;
 /// Beantwortet den übergebenen Videoanruf bzw. entfernt das Halten.
 /// @todo Differenzierung zwischen Anruf beantwortet / halten?
 	Call doVCall(Call call) = 0;	
@@ -94,3 +94,5 @@ class Skype: Connection, IMCallConnection, VideoCallConnection{
 void SkypeSpecificFunction();
 };
 
+class User{
+};
