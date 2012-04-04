@@ -47,7 +47,7 @@ public signals:
 	msgReceived(Message msg);
 };
 
-class CallConnection: public Connect{
+class CallConnection: public Connection{
 /// Führt einen Anruf an die übergebenen Benutzer aus.
 /// @return Anruf als @see Call.
 	Call doCall(User[] users) = 0;
